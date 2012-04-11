@@ -1,32 +1,32 @@
-set b, 0x2000
-set i, 0
-set j, 0
+set b, 0x2000    ;sets text to be green on black
+set i, 0		 ;screen cursor position
+set j, 0		 ;keyboard read in maker, must not exceed 16
 
 :wait
-    set [0x8000+i], 0x00df
-    set a, [0x9000+j]
+    set [0x8000+i], 0x00df		;sets initial cursor to a blinking line
+    set a, [0x9000+j]			;wait for input
     ife a, 0
         set pc, wait
-    ife a, 0x8
+    ife a, 0x8					;if delete key
         set pc, del
-    ife a, 0xa
+    ife a, 0xa					;if enter key
         set pc, ent
-    bor b, a
-    set [0x8000 + i], b
-    jsr clearmem
-    set pc, wait
+    bor b, a					;combines the colour info stored in b with the collected char in a
+    set [0x8000 + i], b			;prints the combination
+    jsr clearmem				;clears all back to normal
+    set pc, wait				;restarts waiting for new input
 
 :del
-    set [0x8000+i], 0x0000
+    set [0x8000+i], 0x0000		;remove blinking line
     ifg i, 0
-        sub i, 1
+        sub i, 1				;move screen cursor back one
     jsr clearmem
     set pc, wait
 
 :ent
     set [0x8000+i], 0x0000
-    set x, i
-    div x, 32
+    set x, i					;this calculates the line number and adds the correct spaces to start on
+    div x, 32					;new line
     add x, 1
     mul x, 32
     sub x, 1
@@ -35,12 +35,12 @@ set j, 0
     set pc, wait
 
 :clearmem
-    set [0x9000+j], 0
+    set [0x9000+j], 0			;sets the input memory to 0
     add j, 1
-    ife j, 16
+    ife j, 16					;if j = 16 set j = 0
          set j, 0
     add i, 1
     ife a, 0x8
-         sub i, 1
-    set b, 0x2000
+         sub i, 1				;counter inc. in cursor pos from previous line
+    set b, 0x2000				;removes character info from b
     set pc, pop
