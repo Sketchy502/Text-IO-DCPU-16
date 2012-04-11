@@ -2,3 +2,6 @@ Simple Text IO created whilst learning about the DCPU-16
 
 Created and runs on the DCPU=16 emulator located at:
 http://denull.ru/dcpu/dcpu.htm
+
+TODO:
+punctuation, case sensativity, delete removes newlines if made from enter
