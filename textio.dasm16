@@ -11,8 +11,8 @@ set j, 0		 ;keyboard read in maker, must not exceed 16
         set pc, del
     ife a, 0xa					;if enter key
         set pc, ent
-    bor b, a					;combines the colour info stored in b with the collected char in a
-    set [0x8000 + i], b			;prints the combination
+    bor a, b					;combines the colour info stored in b with the collected char in a
+    set [0x8000 + i], a			;prints the combination
     jsr clearmem				;clears all back to normal
     set pc, wait				;restarts waiting for new input
 
@@ -42,5 +42,4 @@ set j, 0		 ;keyboard read in maker, must not exceed 16
     add i, 1
     ife a, 0x8
          sub i, 1				;counter inc. in cursor pos from previous line
-    set b, 0x2000				;removes character info from b
     set pc, pop
